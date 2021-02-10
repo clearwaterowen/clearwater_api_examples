@@ -15,8 +15,15 @@ class Clearwater:
             return print('Error: '+response.json().get('message'))
         return response.json()
 
-    def get_specific_vessel(self, vessel_id):
-        url = f'{self.host}/vessel/{vessel_id}?api_key={self.api_key}'
+    def get_vessel_by_imo(self, imo: int):
+        for vessel in self.get_all_vessels():
+            if vessel.get('imo') == imo:
+                return vessel
+        else:
+            return 'Vessel not found'
+
+    def get_vessel_by_clearwater_id(self, clearwater_id: int):
+        url = f'{self.host}/vessel/{clearwater_id}?api_key={self.api_key}'
         response = requests.get(url, self.headers)
 
         if response.status_code != 200:
